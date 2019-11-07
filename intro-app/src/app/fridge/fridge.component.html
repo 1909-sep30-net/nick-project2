@@ -1,0 +1,33 @@
+<p>fridge works!</p>
+
+<img [src]="imageUrl" height="400px" (click)="toggleFridge()">
+
+<!--
+angular has directives
+- structural directives
+    they add or remove elements from the page
+    ex: ngIf, ngFor, ngSwitch, (custom)
+- attribute directives
+    they modify elements, not add or remove
+    ex: ngClass, ngStyle, (custom)
+- components
+-->
+<!-- RHS of (e.g.) event binding is a "template statement", you can
+do any TS statement in there, have component object members in scope -->
+<!-- RHS of ngIf is a "template expression" (actually a special ngIf one) -->
+<!-- you can access anything on the component object from in there -->
+<ul *ngIf="open && items">
+  <div *ngIf="items.length === 0">
+    Fridge is empty
+  </div>
+  <!-- ngFor has a special syntax of its own -->
+  <li *ngFor="let item of items">
+    {{ item.name }}
+  </li>
+</ul>
+<div *ngIf="open && !items">
+  Loading...
+</div>
+<div *ngIf="!open">
+  Fridge is closed
+</div>
