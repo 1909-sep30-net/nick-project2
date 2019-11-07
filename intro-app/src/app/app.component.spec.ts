@@ -1,11 +1,13 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { Directive } from '@angular/core';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        StubFridgeDirective
       ],
     }).compileComponents();
   }));
@@ -26,6 +28,17 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('intro-app app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('the fridge is running!');
   });
 });
+
+// we need something to take the place of the fridge component...
+// and this works fine (@Component also would have worked)
+
+// alternative: use NO_ERRORS_SCHEMA option
+// on the testingmodule above, that will tell it
+// to ignore every element it doesn't recognize
+@Directive({
+  selector: 'app-fridge'
+})
+class StubFridgeDirective {}

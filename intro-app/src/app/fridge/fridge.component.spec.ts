@@ -1,14 +1,22 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FridgeComponent } from './fridge.component';
+import { FridgeApiService } from '../fridge-api.service';
 
 describe('FridgeComponent', () => {
   let component: FridgeComponent;
   let fixture: ComponentFixture<FridgeComponent>;
 
   beforeEach(async(() => {
+    const apiSpy = jasmine.createSpyObj('FridgeApiService', ['getItems']);
+    // the spy service will say there are no items in the fridge
+    apiSpy.getItems.and.returnValue(Promise.resolve([]));
+
     TestBed.configureTestingModule({
-      declarations: [ FridgeComponent ]
+      declarations: [FridgeComponent],
+      providers: [
+        { provide: FridgeApiService, useValue: apiSpy }
+      ]
     })
     .compileComponents();
   }));
