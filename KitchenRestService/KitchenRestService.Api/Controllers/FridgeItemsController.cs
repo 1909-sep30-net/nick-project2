@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KitchenRestService.Api.Models;
+using KitchenRestService.Logic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,87 +13,71 @@ namespace KitchenRestService.Api.Controllers
     [ApiController]
     public class FridgeItemsController : ControllerBase
     {
-        private readonly Fridge _fridge;
+        private readonly IKitchenRepo _kitchenRepo;
+        private readonly IFridgeService _fridge;
 
-        public FridgeItemsController(Fridge fridge)
+        public FridgeItemsController(IKitchenRepo kitchenRepo, IFridgeService fridge)
         {
+            _kitchenRepo = kitchenRepo ?? throw new ArgumentNullException(nameof(kitchenRepo));
             _fridge = fridge ?? throw new ArgumentNullException(nameof(fridge));
         }
 
         // GET: api/FridgeItems
         [HttpGet]
-        public IEnumerable<FridgeItem> Get()
+        public async Task<IEnumerable<ApiFridgeItem>> GetAsync()
         {
-            // with a return type like this, ASP.NET choose status code "200" for success,
-            // and serializes the return value for the response body.
-            return _fridge.Items;
+            var items = await _kitchenRepo.GetAllFridgeItemsAsync();
+            return items.Select(i => new ApiFridgeItem
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Expiration = i.Expiration
+            });
         }
 
         // GET: api/FridgeItems/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public async Task<ApiFridgeItem> GetByIdAsync(int id)
         {
-            return "value";
+            var item = await _kitchenRepo.GetFridgeItemAsync(id);
+            return new ApiFridgeItem
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Expiration = item.Expiration
+            };
         }
 
         // POST: api/FridgeItems
         [HttpPost]
-        public ActionResult Post([FromBody, Bind("Name,Expiration")] FridgeItem item)
+        public async Task<ActionResult> PostAsync([FromBody, Bind("Name,Expiration")] ApiFridgeItem model)
         {
-            // we don't need this, because with [ApiController] attribute,
-            // we automatically do this on every action method:
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest("all error infos"); // 400, client error
-            //}
-
-            // other validation besides data annotations, you'll need to return BadRequest manually.
-
-            // the client can't set the ID
-            var newId = _fridge.Items.Max(i => i.Id) + 1;
-
-            item.Id = newId;
-
-            _fridge.Items.Add(item);
+            var item = new FridgeItem
+            {
+                Name = model.Name,
+                Expiration = model.Expiration
+            };
+            var newItem = await _kitchenRepo.CreateFridgeItemAsync(item);
+            var newModel = new ApiFridgeItem
+            {
+                Id = newItem.Id,
+                Name = newItem.Name,
+                Expiration = newItem.Expiration
+            };
 
             // in a response to POST, you're supposed to
             // send "201 Created" status, with a Location header indicating
             // the URL of the newly created resource, and a representation of the
             // new resource in the body.
-            return CreatedAtRoute("Get", new { Id = newId }, item);
+            return CreatedAtAction(nameof(GetByIdAsync), new { newModel.Id }, newModel);
         }
 
-        // PUT: api/FridgeItems/5
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] FridgeItem item)
+        // DELETE: api/FridgeItems/expired
+        [HttpDelete("expired")]
+        public async Task<IActionResult> DeleteExpiredAsync()
         {
-            // ignore id in the body
-            if (_fridge.Items.FirstOrDefault(i => i.Id == id) is FridgeItem oldItem)
-            {
-                if (oldItem.Expiration.Date != item.Expiration.Date)
-                {
-                    // 403 forbidden (not authorized to make that change)
-                    return StatusCode(StatusCodes.Status403Forbidden);
-                    return Forbid();
-                }
-                oldItem.Name = item.Name;
-                return NoContent(); // 204 success and nothing is in the body
-            }
-            // not found (404)
-            return NotFound();
-        }
-
-        // DELETE: api/FridgeItems/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            if (_fridge.Items.FirstOrDefault(i => i.Id == id) is FridgeItem oldItem)
-            {
-                _fridge.Items.Remove(oldItem);
-                return NoContent();
-            }
-            // not found (404)
-            return NotFound();
+            await _fridge.CleanFridgeAsync();
+            return NoContent();
         }
     }
 }

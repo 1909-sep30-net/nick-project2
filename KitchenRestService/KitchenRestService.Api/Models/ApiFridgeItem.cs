@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KitchenRestService.Api.Models
 {
-    public class FridgeItem
+    public class ApiFridgeItem
     {
         public int Id { get; set; }
 

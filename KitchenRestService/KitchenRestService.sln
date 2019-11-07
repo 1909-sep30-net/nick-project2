@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenRestService.Api", "K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenRestService.Tests", "KitchenRestService.Tests\KitchenRestService.Tests.csproj", "{06D6856A-6273-4A47-A638-1EF8E45500FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenRestService.Logic", "KitchenRestService.Logic\KitchenRestService.Logic.csproj", "{EE9CBB54-56DA-43EA-81DB-CDBB46869062}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenRestService.Data", "KitchenRestService.Data\KitchenRestService.Data.csproj", "{4F9BD67E-737A-4F39-8C30-F9E50C2641DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE9CBB54-56DA-43EA-81DB-CDBB46869062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE9CBB54-56DA-43EA-81DB-CDBB46869062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE9CBB54-56DA-43EA-81DB-CDBB46869062}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE9CBB54-56DA-43EA-81DB-CDBB46869062}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F9BD67E-737A-4F39-8C30-F9E50C2641DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F9BD67E-737A-4F39-8C30-F9E50C2641DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F9BD67E-737A-4F39-8C30-F9E50C2641DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F9BD67E-737A-4F39-8C30-F9E50C2641DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

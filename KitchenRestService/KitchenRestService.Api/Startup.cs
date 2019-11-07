@@ -1,7 +1,10 @@
 ﻿using KitchenRestService.Api.Models;
+using KitchenRestService.Data;
+using KitchenRestService.Logic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +25,13 @@ namespace KitchenRestService.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<Fridge>();
+            services.AddDbContext<KitchenContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("KitchenDb"));
+            });
+            services.AddScoped<IKitchenRepo, KitchenRepo>();
+            services.AddScoped<IFridgeService, FridgeService>();
+            services.AddScoped<DataSeeder>();
 
             services.AddCors(options =>
             {
