@@ -57,7 +57,7 @@ steps:
   workingDirectory: $(appDir)
 
 - script: npx ng e2e
-  displayName: ng e2e
+  displayName: ng test
   workingDirectory: $(appDir)
 
 - script: npm run lint
