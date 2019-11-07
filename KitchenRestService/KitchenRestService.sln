@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenRestService.Api", "KitchenRestService.Api\KitchenRestService.Api.csproj", "{7EA628CD-EE67-4A7A-B21D-C352E8ABA2DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenRestService.Api", "KitchenRestService.Api\KitchenRestService.Api.csproj", "{7EA628CD-EE67-4A7A-B21D-C352E8ABA2DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenRestService.Tests", "KitchenRestService.Tests\KitchenRestService.Tests.csproj", "{06D6856A-6273-4A47-A638-1EF8E45500FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7EA628CD-EE67-4A7A-B21D-C352E8ABA2DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EA628CD-EE67-4A7A-B21D-C352E8ABA2DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EA628CD-EE67-4A7A-B21D-C352E8ABA2DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D6856A-6273-4A47-A638-1EF8E45500FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
