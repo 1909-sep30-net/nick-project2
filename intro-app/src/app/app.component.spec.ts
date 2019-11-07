@@ -1,13 +1,13 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { Directive } from '@angular/core';
+import { Component } from '@angular/core';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        StubFridgeDirective
+        FridgeStubComponent
       ],
     }).compileComponents();
   }));
@@ -38,7 +38,5 @@ describe('AppComponent', () => {
 // alternative: use NO_ERRORS_SCHEMA option
 // on the testingmodule above, that will tell it
 // to ignore every element it doesn't recognize
-@Directive({
-  selector: 'app-fridge'
-})
-class StubFridgeDirective {}
+@Component({ selector: 'app-fridge', template: '' })
+class FridgeStubComponent { }
