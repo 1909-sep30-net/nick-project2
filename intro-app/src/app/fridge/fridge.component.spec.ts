@@ -18,7 +18,7 @@ describe('FridgeComponent', () => {
         { provide: FridgeApiService, useValue: apiSpy }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -29,5 +29,11 @@ describe('FridgeComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have the open image when open', () => {
+    component.open = true;
+    // the name of the image contains "open"
+    expect(component.imageUrl).toContain('open');
   });
 });
