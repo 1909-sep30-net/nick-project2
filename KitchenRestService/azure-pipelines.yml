@@ -1,0 +1,82 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - KitchenRestService
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+- checkout: self
+  clean: true
+
+- task: SonarCloudPrepare@1
+  displayName: Prepare SonarCloud analysis
+  inputs:
+    SonarCloud: 'sonarcloud-escalonn'
+    organization: '1909-sep30-net'
+    scannerMode: 'MSBuild'
+    projectKey: '1909nickproject2api'
+    extraProperties: |
+      sonar.exclusions=**/lib/**
+      sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml
+
+# three different ways to solve the initial problem
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build'
+  workingDirectory: KitchenRestService
+
+# a task can encapsulate some useful logic so we don't have to
+# write it all out in script step...
+# in this case, this task is both running tests and publishing the results
+# to the build itself
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    projects: 'KitchenRestService'
+    arguments:
+      --configuration $(buildConfiguration)
+      --settings KitchenRestService/coverletArgs.runsettings
+
+- task: PublishCodeCoverageResults@1
+  displayName: Publish code coverage
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Agent.TempDirectory)/*/coverage.cobertura.xml'
+
+- task: SonarCloudAnalyze@1
+  displayName: Run SonarCloud analysis
+
+- task: SonarCloudPublish@1
+  displayName: Publish SonarCloud quality gate result
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish + zip
+  inputs:
+    command: 'publish'
+    arguments: --configuration $(buildConfiguration)
+    publishWebProjects: true
+    zipAfterPublish: true
+
+- task: AzureRmWebAppDeployment@4
+  displayName: App Service deploy
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Pay-As-You-Go(0518cd5b-d389-4983-9496-cdcae31dcc60)'
+    appType: 'webApp'
+    WebAppName: '1909nickproject2api'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'

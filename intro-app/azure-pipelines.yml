@@ -1,0 +1,70 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - intro-app
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  appDir: intro-app
+
+steps:
+- checkout: self
+  clean: true
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '12.x'
+  displayName: 'Install Node.js'
+
+- script: npm ci
+  displayName: npm install
+  workingDirectory: $(appDir)
+
+- task: SonarCloudPrepare@1
+  displayName: Prepare SonarCloud analysis
+  inputs:
+    SonarCloud: 'sonarcloud-escalonn'
+    organization: '1909-sep30-net'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: '1909nickproject2angular'
+    cliSources: '$(appDir)/src'
+    extraProperties: |
+      sonar.coverage.exclusions=**/*.spec.ts
+      sonar.typescript.lcov.reportPaths=$(appDir)/coverage/$(appDir)/lcov.info
+
+- script: npx ng build --prod
+  displayName: ng build
+  workingDirectory: $(appDir)
+
+# - script: npm run build:ci
+#   displayName: ng build
+#   workingDirectory: $(appDir)
+
+# - script: npm run test:ci
+#   displayName: ng test
+#   workingDirectory: $(appDir)
+
+- script: npm run lint
+  displayName: ng lint
+  workingDirectory: $(appDir)
+
+- task: SonarCloudAnalyze@1
+  displayName: Run SonarCloud analysis
+
+- task: SonarCloudPublish@1
+  displayName: Publish SonarCloud quality gate result
+
+- task: AzureRmWebAppDeployment@4
+  displayName: App Service deploy
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Pay-As-You-Go(0518cd5b-d389-4983-9496-cdcae31dcc60)'
+    appType: 'webApp'
+    WebAppName: '1909nickproject2angular'
+    packageForLinux: '$(appDir)/dist/*'
