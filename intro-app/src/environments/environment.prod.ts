@@ -1,4 +1,4 @@
 export const environment = {
-  fridgeApiBaseUrl: 'https://localhost:44372',
+  fridgeApiBaseUrl: 'https://1909nickproject2api.azurewebsites.net',
   production: true
 };

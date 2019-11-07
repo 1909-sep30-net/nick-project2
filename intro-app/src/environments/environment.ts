@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  // fridgeApiBaseUrl: 'https://1909nickproject2api.azurewebsites.net',
   fridgeApiBaseUrl: 'https://localhost:44372',
   production: false
 };
