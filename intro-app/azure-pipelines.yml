@@ -21,6 +21,16 @@ steps:
     versionSpec: '12.x'
   displayName: 'Install Node.js'
 
+# npm install:
+#   1. reads the package.json
+#   2. looks at what's already in node_modules, and doesn't upgrade what is already OK
+#   3. downloads anything that needs upgrading into node_modules
+#   4. updates/creates a "manifest file" package-lock.json
+
+# npm ci:
+#   1. ignores package.json
+#   2. deletes everything in node_modules
+#   3. downloads exactly what package-lock.json says (deterministic build)
 - script: npm ci
   displayName: npm install
   workingDirectory: $(appDir)
