@@ -11,7 +11,7 @@ export class FridgeApiService {
   constructor(private httpClient: HttpClient) { }
 
   getItems(): Promise<FridgeItem[]> {
-    let url = `${environment.fridgeApiBaseUrl}/api/fridgeitems`;
+    const url = `${environment.fridgeApiBaseUrl}/api/fridgeitems`;
     return this.httpClient.get<FridgeItem[]>(url).toPromise();
   }
 }

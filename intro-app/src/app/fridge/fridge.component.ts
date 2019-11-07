@@ -8,8 +8,8 @@ import { FridgeApiService } from '../fridge-api.service';
   styleUrls: ['./fridge.component.css']
 })
 export class FridgeComponent implements OnInit {
-  private open: boolean = false;
-  private items: FridgeItem[] = null;
+  open = false;
+  items: FridgeItem[] = null;
 
   // this is like a C# getter-only property
   get imageUrl() {
