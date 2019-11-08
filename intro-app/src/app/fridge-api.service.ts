@@ -37,6 +37,11 @@ export class FridgeApiService {
     return this.httpClient.get<FridgeItem[]>(url).toPromise();
   }
 
+  removeItem(id: number) {
+    const url = `${environment.fridgeApiBaseUrl}/api/fridgeitems/${id}`;
+    return this.httpClient.delete(url).toPromise();
+  }
+
   cleanFridge() {
     const url = `${environment.fridgeApiBaseUrl}/api/fridgeitems/expired`;
     return this.httpClient.delete(url).toPromise();

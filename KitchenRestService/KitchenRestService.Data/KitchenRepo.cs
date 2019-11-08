@@ -34,9 +34,9 @@ namespace KitchenRestService.Data
                 .ToListAsync();
         }
 
-        public Task<FridgeItem> GetFridgeItemAsync(int id)
+        public async Task<FridgeItem> GetFridgeItemAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.FridgeItems.FindAsync(id);
         }
 
         public async Task<FridgeItem> CreateFridgeItemAsync(FridgeItem item)

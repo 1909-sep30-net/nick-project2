@@ -79,6 +79,29 @@ namespace KitchenRestService.Api.Controllers
             return CreatedAtAction(nameof(GetByIdAsync), new { newModel.Id }, newModel);
         }
 
+        // DELETE: api/FridgeItems/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(
+            [FromRoute] int id,
+            [FromServices] AuthInfoService authInfo)
+        {
+            var item = await _kitchenRepo.GetFridgeItemAsync(id);
+            if (item is null)
+            {
+                return NotFound();
+            }
+            var email = await authInfo.GetUserEmailAsync(Request);
+            var user = await _userRepo.GetUserByEmailAsync(email);
+
+            if (!user.Admin && user.Id != item.OwnerId)
+            {
+                return Forbid();
+            }
+
+            await _kitchenRepo.DeleteFridgeItemAsync(id);
+            return NoContent();
+        }
+
         // DELETE: api/FridgeItems/expired
         [HttpDelete("expired")]
         public async Task<IActionResult> DeleteExpiredAsync([FromServices] AuthInfoService authInfo)

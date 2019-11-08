@@ -18,7 +18,7 @@ namespace KitchenRestService.Api.Controllers
             _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("{email}", Name = "GetUser")]
         public async Task<ActionResult<ApiUser>> GetAsync(string email)
         {
             if (await _userRepo.GetUserByEmailAsync(email) is User user)
@@ -34,6 +34,7 @@ namespace KitchenRestService.Api.Controllers
             return NotFound();
         }
 
+        [HttpPost]
         public async Task<ActionResult> PostAsync([Bind("Email,Name")] ApiUser model)
         {
             var user = new User
@@ -57,7 +58,7 @@ namespace KitchenRestService.Api.Controllers
                 Email = newUser.Email,
                 Admin = newUser.Admin
             };
-            return CreatedAtAction(nameof(GetAsync), new { newModel.Email }, newModel);
+            return CreatedAtRoute("GetUser", new { email = newModel.Email }, newModel);
         }
     }
 }

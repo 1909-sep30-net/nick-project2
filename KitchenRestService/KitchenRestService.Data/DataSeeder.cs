@@ -21,7 +21,7 @@ namespace KitchenRestService.Data
             var user = new User
             {
                 Email = "nick.escalona@revature.com",
-                Name = "Nick",
+                Name = "Nick Escalona",
                 Admin = true
             };
             user.FridgeItems.UnionWith(new List<FridgeItem> {

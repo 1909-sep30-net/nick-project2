@@ -33,15 +33,23 @@ export class FridgeComponent implements OnInit {
       // this.items = [
       //   { id: 1, name: 'coffee', expiration: new Date(2020, 3, 1) }
       // ];
-      this.fridgeApi.getItems()
-        .then(items => this.items = items);
+      this.loadItems().then();
     }
+  }
+
+  loadItems() {
+    return this.fridgeApi.getItems()
+      .then(items => this.items = items);
   }
 
   cleanFridge() {
     this.fridgeApi.cleanFridge()
-      .then(() => this.fridgeApi.getItems())
-      .then(items => this.items = items);
+      .then(() => this.loadItems());
+  }
+
+  remove(item: FridgeItem) {
+    this.fridgeApi.removeItem(item.id)
+      .then(() => this.loadItems());
   }
 
   // if ctor param has access modifier,
