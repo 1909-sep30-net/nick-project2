@@ -7,6 +7,7 @@ import { FridgeComponent } from './fridge/fridge.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AppRoutingModule } from './app-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // this is a decorator
 // decorators are preview TS syntax
@@ -32,7 +33,8 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   // we can register services for DI here (scoped to this module)
   providers: [],

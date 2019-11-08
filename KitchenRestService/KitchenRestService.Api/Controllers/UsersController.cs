@@ -58,7 +58,7 @@ namespace KitchenRestService.Api.Controllers
                 Email = newUser.Email,
                 Admin = newUser.Admin
             };
-            return CreatedAtRoute("GetUser", new { email = newModel.Email }, newModel);
+            return CreatedAtRoute("GetUser", new { newModel.Email }, newModel);
         }
     }
 }

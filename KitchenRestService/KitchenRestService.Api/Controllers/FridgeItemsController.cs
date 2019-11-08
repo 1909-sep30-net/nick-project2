@@ -41,7 +41,7 @@ namespace KitchenRestService.Api.Controllers
         }
 
         // GET: api/FridgeItems/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetFridgeItem")]
         public async Task<ApiFridgeItem> GetByIdAsync(int id)
         {
             var item = await _kitchenRepo.GetFridgeItemAsync(id);
@@ -56,12 +56,18 @@ namespace KitchenRestService.Api.Controllers
 
         // POST: api/FridgeItems
         [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody, Bind("Name,Expiration")] ApiFridgeItem model)
+        public async Task<ActionResult> PostAsync(
+            [FromBody, Bind("Name,Expiration")] ApiFridgeItem model,
+            [FromServices] AuthInfoService authInfo)
         {
+            var email = await authInfo.GetUserEmailAsync(Request);
+            var user = await _userRepo.GetUserByEmailAsync(email);
+
             var item = new FridgeItem
             {
                 Name = model.Name,
-                Expiration = model.Expiration
+                Expiration = model.Expiration == default ? DateTime.MaxValue : model.Expiration,
+                Owner = user
             };
             var newItem = await _kitchenRepo.CreateFridgeItemAsync(item);
             var newModel = new ApiFridgeItem
@@ -76,7 +82,7 @@ namespace KitchenRestService.Api.Controllers
             // send "201 Created" status, with a Location header indicating
             // the URL of the newly created resource, and a representation of the
             // new resource in the body.
-            return CreatedAtAction(nameof(GetByIdAsync), new { newModel.Id }, newModel);
+            return CreatedAtRoute("GetFridgeItem", new { newModel.Id }, newModel);
         }
 
         // DELETE: api/FridgeItems/5

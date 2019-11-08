@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import User from './models/user';
 import UserCreate from './models/user-create';
+import FridgeItemCreate from './models/fridge-item-create';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,11 @@ export class FridgeApiService {
   getItems(): Promise<FridgeItem[]> {
     const url = `${environment.fridgeApiBaseUrl}/api/fridgeitems`;
     return this.httpClient.get<FridgeItem[]>(url).toPromise();
+  }
+
+  addItem(item: FridgeItemCreate) {
+    const url = `${environment.fridgeApiBaseUrl}/api/fridgeitems`;
+    return this.httpClient.post<FridgeItem>(url, item).toPromise();
   }
 
   removeItem(id: number) {

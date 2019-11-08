@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import FridgeItem from '../models/fridge-item';
 import { FridgeApiService } from '../fridge-api.service';
-import { AuthService } from '../auth.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import FridgeItemCreate from '../models/fridge-item-create';
 
 @Component({
   selector: 'app-fridge',
@@ -11,6 +12,9 @@ import { AuthService } from '../auth.service';
 export class FridgeComponent implements OnInit {
   open = false;
   items: FridgeItem[] = null;
+  addItem = this.formBuilder.group({
+    itemName: ['', Validators.required]
+  });
 
   get user() {
     return this.fridgeApi.user;
@@ -47,6 +51,13 @@ export class FridgeComponent implements OnInit {
       .then(() => this.loadItems());
   }
 
+  onSubmitAddItem() {
+    const name = this.addItem.get('itemName').value as string;
+    const item: FridgeItemCreate = { name };
+    this.fridgeApi.addItem(item)
+      .then(() => this.loadItems());
+  }
+
   remove(item: FridgeItem) {
     this.fridgeApi.removeItem(item.id)
       .then(() => this.loadItems());
@@ -54,7 +65,10 @@ export class FridgeComponent implements OnInit {
 
   // if ctor param has access modifier,
   // TS will put that value into a same-name property of the class
-  constructor(private fridgeApi: FridgeApiService) { }
+  constructor(
+    private fridgeApi: FridgeApiService,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
   }

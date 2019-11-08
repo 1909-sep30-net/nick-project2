@@ -23,10 +23,10 @@ do any TS statement in there, have component object members in scope -->
   <!-- ngFor has a special syntax of its own -->
   <li *ngFor="let item of items">
     {{ item.name }}
-    <span *ngIf="this.user">
-    <span *ngIf="item.ownerId === this.user.id">(mine)</span>
-    <span *ngIf="item.ownerId && item.ownerId !== this.user.id">(not mine)</span>
-    <button (click)="remove(item)" *ngIf="this.user.admin || item.ownerId === this.user.id">Remove</button>
+    <span *ngIf="user">
+    <span *ngIf="item.ownerId === user.id">(mine)</span>
+    <span *ngIf="item.ownerId && item.ownerId !== user.id">(not mine)</span>
+    <button (click)="remove(item)" *ngIf="user.admin || item.ownerId === user.id">Remove</button>
     </span>
   </li>
 </ul>
@@ -36,6 +36,13 @@ do any TS statement in there, have component object members in scope -->
 <div *ngIf="!open">
   Fridge is closed
 </div>
-<div *ngIf="this.user && this.user.admin">
+<div *ngIf="user && user.admin">
   <button (click)="cleanFridge()">Clean Fridge</button>
 </div>
+<form *ngIf="open && user" [formGroup]="addItem" (ngSubmit)="onSubmitAddItem()">
+  <label>
+    Name:
+    <input type="text" formControlName="itemName">
+  </label>
+  <button type="submit">Submit</button>
+</form>

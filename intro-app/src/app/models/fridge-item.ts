@@ -1,6 +1,7 @@
-export default interface FridgeItem {
+import FridgeItemCreate from './fridge-item-create';
+
+export default interface FridgeItem extends FridgeItemCreate {
   id: number;
-  name: string;
   expiration: Date;
   ownerId: number;
 }
