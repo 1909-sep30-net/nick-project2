@@ -26,7 +26,7 @@ namespace KitchenRestService.Api.Filters
                 operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
                 //operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
 
-                var oAuthScheme = new OpenApiSecurityScheme
+                var bearerScheme = new OpenApiSecurityScheme
                 {
                     // the id here must match the security definition id defined in the startup file
                     Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
@@ -35,7 +35,7 @@ namespace KitchenRestService.Api.Filters
                 operation.Security = new List<OpenApiSecurityRequirement>
                 {
                     // scope list should be empty when definition type is bearer
-                    new OpenApiSecurityRequirement { [ oAuthScheme ] = Array.Empty<string>() }
+                    new OpenApiSecurityRequirement { [ bearerScheme ] = Array.Empty<string>() }
                 };
             }
         }
