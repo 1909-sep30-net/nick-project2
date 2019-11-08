@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FridgeComponent } from './fridge.component';
 import { FridgeApiService } from '../fridge-api.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('FridgeComponent', () => {
   let component: FridgeComponent;
@@ -14,6 +15,7 @@ describe('FridgeComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [FridgeComponent],
+      imports: [ReactiveFormsModule],
       providers: [
         { provide: FridgeApiService, useValue: apiSpy }
       ]
