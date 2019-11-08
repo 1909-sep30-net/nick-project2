@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using KitchenRestService.Api.Models;
 using KitchenRestService.Api.Services;
@@ -12,6 +13,7 @@ namespace KitchenRestService.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
+    [SecurityRequirementsOperationFilter]
     [ApiController]
     public class FridgeItemsController : ControllerBase
     {
@@ -28,6 +30,7 @@ namespace KitchenRestService.Api.Controllers
 
         // GET: api/FridgeItems
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<ApiFridgeItem>> GetAsync()
         {
             var items = await _kitchenRepo.GetAllFridgeItemsAsync();
@@ -42,9 +45,14 @@ namespace KitchenRestService.Api.Controllers
 
         // GET: api/FridgeItems/5
         [HttpGet("{id}", Name = "GetFridgeItem")]
-        public async Task<ApiFridgeItem> GetByIdAsync(int id)
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<ApiFridgeItem>> GetByIdAsync(int id)
         {
             var item = await _kitchenRepo.GetFridgeItemAsync(id);
+            if (item is null)
+            {
+                return NotFound();
+            }
             return new ApiFridgeItem
             {
                 Id = item.Id,
@@ -56,6 +64,7 @@ namespace KitchenRestService.Api.Controllers
 
         // POST: api/FridgeItems
         [HttpPost]
+        [ProducesResponseType(typeof(ApiFridgeItem), 201)]
         public async Task<ActionResult> PostAsync(
             [FromBody, Bind("Name,Expiration")] ApiFridgeItem model,
             [FromServices] AuthInfoService authInfo)
@@ -87,6 +96,9 @@ namespace KitchenRestService.Api.Controllers
 
         // DELETE: api/FridgeItems/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> DeleteAsync(
             [FromRoute] int id,
             [FromServices] AuthInfoService authInfo)
@@ -110,6 +122,8 @@ namespace KitchenRestService.Api.Controllers
 
         // DELETE: api/FridgeItems/expired
         [HttpDelete("expired")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(403)]
         public async Task<IActionResult> DeleteExpiredAsync([FromServices] AuthInfoService authInfo)
         {
             var email = await authInfo.GetUserEmailAsync(Request);

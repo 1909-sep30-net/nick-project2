@@ -1,15 +1,14 @@
-﻿using KitchenRestService.Api.Services;
+﻿using KitchenRestService.Api.Filters;
+using KitchenRestService.Api.Services;
 using KitchenRestService.Data;
 using KitchenRestService.Logic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 
 namespace KitchenRestService.Api
@@ -52,12 +51,6 @@ namespace KitchenRestService.Api
             services.AddControllers(options =>
             {
                 options.ReturnHttpNotAcceptable = true;
-                options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-                options.InputFormatters.Add(new XmlSerializerInputFormatter(options));
-                options.FormatterMappings.SetMediaTypeMappingForFormat("xml",
-                    new MediaTypeHeaderValue("application/xml"));
-                options.FormatterMappings.SetMediaTypeMappingForFormat("json",
-                    new MediaTypeHeaderValue("application/json"));
             });
 
             // this block copied from Auth0 ASP.NET Core quickstart.
@@ -72,19 +65,21 @@ namespace KitchenRestService.Api
             });
 
             // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(options =>
+            services.AddSwaggerGen(c =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Kitchen API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Kitchen API", Version = "v1" });
 
-                // not quite right yet, something like this.....
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = JwtBearerDefaults.AuthenticationScheme
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n" +
+                        "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n" +
+                        "Example: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header
                 });
+
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
             });
         }
 

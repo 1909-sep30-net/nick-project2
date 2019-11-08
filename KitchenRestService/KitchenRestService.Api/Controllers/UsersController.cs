@@ -35,6 +35,7 @@ namespace KitchenRestService.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(ApiUser), 201)]
         public async Task<ActionResult> PostAsync([Bind("Email,Name")] ApiUser model)
         {
             var user = new User
