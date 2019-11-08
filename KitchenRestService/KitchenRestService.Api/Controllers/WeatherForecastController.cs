@@ -23,9 +23,7 @@ namespace KitchenRestService.Api.Controllers
             _logger = logger;
         }
 
-        //[HttpGet(".{format}")]
-        //[FormatFilter]
-        //[Produces("application/xml")]
+        [HttpGet]
         public IActionResult Get()
         {
             var rng = new Random();

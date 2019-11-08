@@ -24,9 +24,9 @@ do any TS statement in there, have component object members in scope -->
   <li *ngFor="let item of items">
     {{ item.name }}
     <span *ngIf="user">
-    <span *ngIf="item.ownerId === user.id">(mine)</span>
-    <span *ngIf="item.ownerId && item.ownerId !== user.id">(not mine)</span>
-    <button (click)="remove(item)" *ngIf="user.admin || item.ownerId === user.id">Remove</button>
+      <span *ngIf="item.ownerId === user.id">(mine)</span>
+      <span *ngIf="item.ownerId && item.ownerId !== user.id">(not mine)</span>
+      <button (click)="remove(item)" *ngIf="user.admin || item.ownerId === user.id">Remove</button>
     </span>
   </li>
 </ul>
