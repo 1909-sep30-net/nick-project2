@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KitchenRestService.Api.Models;
+using KitchenRestService.Api.Services;
 using KitchenRestService.Logic;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitchenRestService.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class FridgeItemsController : ControllerBase
     {
         private readonly IKitchenRepo _kitchenRepo;
+        private readonly IUserRepo _userRepo;
         private readonly IFridgeService _fridge;
 
-        public FridgeItemsController(IKitchenRepo kitchenRepo, IFridgeService fridge)
+        public FridgeItemsController(IKitchenRepo kitchenRepo, IUserRepo userRepo, IFridgeService fridge)
         {
             _kitchenRepo = kitchenRepo ?? throw new ArgumentNullException(nameof(kitchenRepo));
+            _userRepo = userRepo ?? throw new ArgumentNullException(nameof(userRepo));
             _fridge = fridge ?? throw new ArgumentNullException(nameof(fridge));
         }
 
@@ -31,7 +35,8 @@ namespace KitchenRestService.Api.Controllers
             {
                 Id = i.Id,
                 Name = i.Name,
-                Expiration = i.Expiration
+                Expiration = i.Expiration,
+                OwnerId = i.OwnerId
             });
         }
 
@@ -44,7 +49,8 @@ namespace KitchenRestService.Api.Controllers
             {
                 Id = item.Id,
                 Name = item.Name,
-                Expiration = item.Expiration
+                Expiration = item.Expiration,
+                OwnerId = item.OwnerId
             };
         }
 
@@ -62,7 +68,8 @@ namespace KitchenRestService.Api.Controllers
             {
                 Id = newItem.Id,
                 Name = newItem.Name,
-                Expiration = newItem.Expiration
+                Expiration = newItem.Expiration,
+                OwnerId = newItem.OwnerId
             };
 
             // in a response to POST, you're supposed to
@@ -74,8 +81,15 @@ namespace KitchenRestService.Api.Controllers
 
         // DELETE: api/FridgeItems/expired
         [HttpDelete("expired")]
-        public async Task<IActionResult> DeleteExpiredAsync()
+        public async Task<IActionResult> DeleteExpiredAsync([FromServices] AuthInfoService authInfo)
         {
+            var email = await authInfo.GetUserEmailAsync(Request);
+            var user = await _userRepo.GetUserByEmailAsync(email);
+            if (!user.Admin)
+            {
+                return Forbid();
+            }
+
             await _fridge.CleanFridgeAsync();
             return NoContent();
         }

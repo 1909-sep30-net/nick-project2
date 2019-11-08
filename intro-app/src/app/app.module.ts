@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FridgeComponent } from './fridge/fridge.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NavbarComponent } from './navbar/navbar.component';
+import { AppRoutingModule } from './app-routing.module';
 
 // this is a decorator
 // decorators are preview TS syntax
@@ -19,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
   // every component must be declared in exactly one module
   declarations: [
     AppComponent,
-    FridgeComponent
+    FridgeComponent,
+    NavbarComponent
   ],
   // if anything in this module needs anything from another module,
   // we have to reference that second module here.
@@ -28,7 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   // we can register services for DI here (scoped to this module)
   providers: [],

@@ -1,6 +1,7 @@
-﻿using KitchenRestService.Api.Models;
+﻿using KitchenRestService.Api.Services;
 using KitchenRestService.Data;
 using KitchenRestService.Logic;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -30,8 +31,10 @@ namespace KitchenRestService.Api
                 options.UseSqlServer(Configuration.GetConnectionString("KitchenDb"));
             });
             services.AddScoped<IKitchenRepo, KitchenRepo>();
+            services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IFridgeService, FridgeService>();
             services.AddScoped<DataSeeder>();
+            services.AddHttpClient<AuthInfoService>();
 
             services.AddCors(options =>
             {
@@ -55,6 +58,16 @@ namespace KitchenRestService.Api
                     new MediaTypeHeaderValue("application/xml"));
                 options.FormatterMappings.SetMediaTypeMappingForFormat("json",
                     new MediaTypeHeaderValue("application/json"));
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://escalonn.auth0.com/";
+                options.Audience = "https://1909nickproject2api.azurewebsites.net";
             });
 
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -86,6 +99,7 @@ namespace KitchenRestService.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseCors("AllowAngular");

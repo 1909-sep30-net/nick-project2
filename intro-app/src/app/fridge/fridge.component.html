@@ -23,6 +23,8 @@ do any TS statement in there, have component object members in scope -->
   <!-- ngFor has a special syntax of its own -->
   <li *ngFor="let item of items">
     {{ item.name }}
+    <span *ngIf="item.ownerId && this.user && item.ownerId === this.user.id">(mine)</span>
+    <span *ngIf="item.ownerId && this.user && item.ownerId !== this.user.id">(not mine)</span>
   </li>
 </ul>
 <div *ngIf="open && !items">
@@ -30,4 +32,7 @@ do any TS statement in there, have component object members in scope -->
 </div>
 <div *ngIf="!open">
   Fridge is closed
+</div>
+<div *ngIf="this.user && this.user.admin">
+  <button (click)="cleanFridge()">Clean Fridge</button>
 </div>

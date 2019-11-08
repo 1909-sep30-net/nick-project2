@@ -20,8 +20,10 @@ namespace KitchenRestService.Logic
             {
                 return false;
             }
-            var deleteTasks = expired.Select(i => _kitchenRepo.DeleteFridgeItemAsync(i.Id));
-            await Task.WhenAll(deleteTasks);
+            foreach (var item in expired)
+            {
+                await _kitchenRepo.DeleteFridgeItemAsync(item.Id);
+            }
             return true;
         }
     }

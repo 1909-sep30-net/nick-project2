@@ -1,0 +1,13 @@
+<!-- copied from Auth0 Angular quickstart. -->
+
+<header>
+  <a routerLink="/">Home</a>
+  &nbsp;
+  <a routerLink="fridge" *ngIf="auth.loggedIn">Fridge</a>
+  &nbsp;
+  <span *ngIf="user">{{ user.name }}</span>
+  <span *ngIf="user && user.admin">&nbsp;(admin)</span>
+  &nbsp;
+  <button (click)="auth.login()" *ngIf="!auth.loggedIn">Log In</button>
+  <button (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</button>
+</header>

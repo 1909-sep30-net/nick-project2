@@ -1,14 +1,22 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { Component } from '@angular/core';
+import { AuthService } from './auth.service';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
+    const authSpy = jasmine.createSpyObj('AuthService',
+      ['localAuthSetup', 'handleAuthCallback']);
+
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        FridgeStubComponent
+        RouterOutletStubComponent,
+        NavbarStubComponent
       ],
+      providers: [
+        { provide: AuthService, useValue: authSpy }
+      ]
     }).compileComponents();
   }));
 
@@ -32,11 +40,14 @@ describe('AppComponent', () => {
   });
 });
 
-// we need something to take the place of the fridge component...
-// and this works fine (@Component also would have worked)
+// we need something to take the place of the router outlet directive...
+// and this works fine
 
 // alternative: use NO_ERRORS_SCHEMA option
 // on the testingmodule above, that will tell it
 // to ignore every element it doesn't recognize
-@Component({ selector: 'app-fridge', template: '' })
-class FridgeStubComponent { }
+@Component({ selector: 'router-outlet', template: '' })
+class RouterOutletStubComponent { }
+
+@Component({ selector: 'app-navbar', template: '' })
+class NavbarStubComponent { }

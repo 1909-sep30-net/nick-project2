@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Component({
   // the "selector" (think CSS selector)
@@ -26,6 +27,13 @@ import { Component } from '@angular/core';
 
   // we also have "animations" to configure here
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'intro-app';
+
+  constructor(private auth: AuthService) { }
+
+  ngOnInit() {
+    this.auth.localAuthSetup();
+    this.auth.handleAuthCallback();
+  }
 }

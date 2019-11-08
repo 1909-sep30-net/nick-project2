@@ -11,5 +11,6 @@ namespace KitchenRestService.Api.Models
         public string Name { get; set; }
 
         public DateTime Expiration { get; set; }
+        public int OwnerId { get; set; }
     }
 }
