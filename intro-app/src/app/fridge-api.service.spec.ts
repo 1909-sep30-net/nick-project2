@@ -3,11 +3,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { FridgeApiService } from './fridge-api.service';
 import { AuthService } from './auth.service';
-import { empty } from 'rxjs';
+import { EMPTY } from 'rxjs';
 
 describe('FridgeApiService', () => {
   const authSpy = jasmine.createSpyObj('AuthService', ['login', 'logout']);
-  authSpy.userProfile$ = empty();
+  authSpy.userProfile$ = EMPTY;
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [HttpClientTestingModule],

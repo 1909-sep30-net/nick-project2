@@ -46,6 +46,8 @@ describe('AppComponent', () => {
 // alternative: use NO_ERRORS_SCHEMA option
 // on the testingmodule above, that will tell it
 // to ignore every element it doesn't recognize
+
+// tslint:disable-next-line: component-selector
 @Component({ selector: 'router-outlet', template: '' })
 class RouterOutletStubComponent { }
 

@@ -14,8 +14,8 @@ export class AuthService {
   // Create an observable of Auth0 instance of client
   auth0Client$ = (from(
     createAuth0Client({
-      domain: "escalonn.auth0.com",
-      client_id: "M8fEFNG18WkDbmrOLg5bYkNktvlddGds",
+      domain: 'escalonn.auth0.com',
+      client_id: 'M8fEFNG18WkDbmrOLg5bYkNktvlddGds',
       redirect_uri: `${window.location.origin}`,
       audience: 'https://1909nickproject2api.azurewebsites.net'
     })
@@ -114,7 +114,7 @@ export class AuthService {
     this.auth0Client$.subscribe((client: Auth0Client) => {
       // Call method to log out
       client.logout({
-        client_id: "M8fEFNG18WkDbmrOLg5bYkNktvlddGds",
+        client_id: 'M8fEFNG18WkDbmrOLg5bYkNktvlddGds',
         returnTo: `${window.location.origin}`
       });
     });
