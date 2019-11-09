@@ -69,17 +69,17 @@ namespace KitchenRestService.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Kitchen API", Version = "v1" });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                // should be "http" type with "bearer" scheme, but swagger-ui
+                // doesn't handle that correctly.
+                c.AddSecurityDefinition("BearerAuth", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.ApiKey,
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n" +
-                        "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n" +
-                        "Example: \"Bearer 12345abcdef\"",
+                    Description = "Bearer authentication scheme with JWT, e.g. \"Bearer eyJhbGciOiJIUzI1NiJ9.e30\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header
                 });
 
-                c.OperationFilter<SecurityRequirementsOperationFilter>();
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
         }
 

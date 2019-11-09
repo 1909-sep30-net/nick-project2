@@ -2,12 +2,15 @@
 using System.Threading.Tasks;
 using KitchenRestService.Api.Models;
 using KitchenRestService.Logic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace KitchenRestService.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
+    [Authorize]
     [ApiController]
     public class UsersController : ControllerBase
     {

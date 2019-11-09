@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace KitchenRestService.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [Authorize]
-    [SecurityRequirementsOperationFilter]
     [ApiController]
     public class FridgeItemsController : ControllerBase
     {
