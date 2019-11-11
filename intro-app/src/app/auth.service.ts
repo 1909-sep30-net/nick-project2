@@ -38,13 +38,13 @@ export class AuthService {
   private userProfileSubject$ = new BehaviorSubject<any>(null);
   userProfile$ = this.userProfileSubject$.asObservable();
   // Create a local property for login status
-  loggedIn: boolean = null;
+  loggedIn: boolean | null = null;
 
   constructor(private router: Router) { }
 
   // When calling, options can be passed if desired
   // https://auth0.github.io/auth0-spa-js/classes/auth0client.html#getuser
-  getUser$(options?): Observable<any> {
+  getUser$(options?: GetUserOptions): Observable<any> {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getUser(options))),
       tap(user => this.userProfileSubject$.next(user))
@@ -120,7 +120,7 @@ export class AuthService {
     });
   }
 
-  getTokenSilently$(options?): Observable<string> {
+  getTokenSilently$(options?: GetTokenSilentlyOptions): Observable<string> {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
     );
