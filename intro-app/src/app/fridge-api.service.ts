@@ -11,7 +11,7 @@ import FridgeItemCreate from './models/fridge-item-create';
   providedIn: 'root'
 })
 export class FridgeApiService {
-  user: User = null;
+  user: User | null = null;
 
   constructor(
     private httpClient: HttpClient,

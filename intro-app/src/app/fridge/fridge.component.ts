@@ -11,7 +11,7 @@ import FridgeItemCreate from '../models/fridge-item-create';
 })
 export class FridgeComponent implements OnInit {
   open = false;
-  items: FridgeItem[] = null;
+  items: FridgeItem[] | null = null;
   addItem = this.formBuilder.group({
     itemName: ['', Validators.required]
   });
@@ -52,10 +52,13 @@ export class FridgeComponent implements OnInit {
   }
 
   onSubmitAddItem() {
-    const name = this.addItem.get('itemName').value as string;
-    const item: FridgeItemCreate = { name };
-    this.fridgeApi.addItem(item)
-      .then(() => this.loadItems());
+    const control = this.addItem.get('itemName');
+    if (control) {
+      const name = control.value as string;
+      const item: FridgeItemCreate = { name };
+      this.fridgeApi.addItem(item)
+        .then(() => this.loadItems());
+    }
   }
 
   remove(item: FridgeItem) {
