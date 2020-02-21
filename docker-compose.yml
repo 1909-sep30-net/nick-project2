@@ -4,8 +4,8 @@ services:
     build:
       context: intro-app
       args:
-        # fridge_api_base_url: http://localhost:5000
-        fridge_api_base_url: http://192.168.99.100:5000
+        fridge_api_base_url: http://localhost:5000 # docker desktop
+        # fridge_api_base_url: http://192.168.99.100:5000 # docker toolbox
     ports:
       - '5001:80'
   api:
