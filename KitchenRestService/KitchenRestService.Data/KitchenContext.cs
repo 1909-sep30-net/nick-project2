@@ -1,5 +1,4 @@
-﻿using System;
-using KitchenRestService.Logic;
+﻿using KitchenRestService.Logic;
 using Microsoft.EntityFrameworkCore;
 
 namespace KitchenRestService.Data
@@ -10,10 +9,6 @@ namespace KitchenRestService.Data
         {
         }
 
-        public KitchenContext()
-        {
-        }
-
         public DbSet<FridgeItem> FridgeItems { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -21,9 +16,6 @@ namespace KitchenRestService.Data
         {
             modelBuilder.Entity<FridgeItem>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .UseIdentityColumn();
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(128);
@@ -31,9 +23,6 @@ namespace KitchenRestService.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .UseIdentityColumn();
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(128);

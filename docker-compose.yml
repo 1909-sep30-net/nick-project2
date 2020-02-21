@@ -15,6 +15,7 @@ services:
     networks:
       - backend
     environment:
+      ProviderType: PostgreSql
       ConnectionStrings__KitchenDb: 'Host=data;Database=kitchen;Username=postgres;Password=Pass@word'
   data:
     image: postgres

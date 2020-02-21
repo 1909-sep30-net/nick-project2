@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using KitchenRestService.Logic;
 using Microsoft.EntityFrameworkCore;
 
 namespace KitchenRestService.Data
 {
-    public class DataSeeder
+    public class DataSeeder : IDataSeeder
     {
         private readonly KitchenContext _context;
 
@@ -18,6 +17,11 @@ namespace KitchenRestService.Data
 
         public async Task<bool> SeedDataAsync()
         {
+            if (!await _context.Database.CanConnectAsync())
+            {
+                await _context.Database.EnsureCreatedAsync();
+            }
+
             var user = new User
             {
                 Email = "nicholasescalona@outlook.com",

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace KitchenRestService.Logic
 
         public async Task<bool> CleanFridgeAsync()
         {
-            var expired = await _kitchenRepo.GetExpiredFridgeItemsAsync(DateTime.Now);
+            IEnumerable<FridgeItem> expired = await _kitchenRepo.GetExpiredFridgeItemsAsync(DateTime.Now);
             if (!expired.Any())
             {
                 return false;

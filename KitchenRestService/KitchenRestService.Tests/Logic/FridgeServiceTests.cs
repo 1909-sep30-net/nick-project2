@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using KitchenRestService.Logic;
 using Moq;
@@ -20,7 +17,7 @@ namespace KitchenRestService.Tests.Logic
 
             var service = new FridgeService(mockRepo.Object);
 
-            var cleaned = await service.CleanFridgeAsync();
+            bool cleaned = await service.CleanFridgeAsync();
 
             Assert.False(cleaned);
         }

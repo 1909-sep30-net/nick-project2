@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using KitchenRestService.Api.Models;
 using KitchenRestService.Api.Services;
@@ -30,7 +29,6 @@ namespace KitchenRestService.Api.Controllers
 
         // GET: api/FridgeItems
         [HttpGet]
-        [Authorize]
         public async Task<IEnumerable<ApiFridgeItem>> GetAsync()
         {
             var items = await _kitchenRepo.GetAllFridgeItemsAsync();

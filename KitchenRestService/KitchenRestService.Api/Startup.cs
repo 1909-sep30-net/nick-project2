@@ -1,4 +1,5 @@
-﻿using KitchenRestService.Api.Filters;
+﻿using System;
+using KitchenRestService.Api.Filters;
 using KitchenRestService.Api.Services;
 using KitchenRestService.Data;
 using KitchenRestService.Logic;
@@ -22,18 +23,24 @@ namespace KitchenRestService.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<KitchenContext>(options =>
+            string providerType = Configuration["ProviderType"];
+            Action<DbContextOptionsBuilder> optionsAction = providerType switch
             {
-                options.UseSqlServer(Configuration.GetConnectionString("KitchenDb"));
-            });
+                "SqlServer" => options => options.UseSqlServer(Configuration.GetConnectionString("KitchenDb")),
+                "PostgreSql" => options => options.UseNpgsql(Configuration.GetConnectionString("KitchenDb")),
+                _ => throw new NotImplementedException($"Unsupported provider type \"{providerType}\"")
+            };
+
+            services.AddDbContext<KitchenContext>(optionsAction);
+
+            services.AddScoped<IDataSeeder, DataSeeder>();
             services.AddScoped<IKitchenRepo, KitchenRepo>();
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IFridgeService, FridgeService>();
-            services.AddScoped<DataSeeder>();
-            services.AddHttpClient<AuthInfoService>();
+
+            services.AddHttpClient<IAuthInfoService, AuthInfoService>();
 
             services.AddCors(options =>
             {
@@ -41,6 +48,8 @@ namespace KitchenRestService.Api
                 builder =>
                 {
                     builder.WithOrigins("http://localhost:4200",
+                                        "http://localhost:5000",
+                                        "http://192.168.99.100:5000",
                                         "https://1909nickproject2angular.azurewebsites.net")
                         .AllowAnyMethod() // not just GET and POST, but allow all methods
                         .AllowAnyHeader()
@@ -83,7 +92,6 @@ namespace KitchenRestService.Api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

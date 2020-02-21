@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace KitchenRestService.Api.Models
+﻿namespace KitchenRestService.Api.Models
 {
     public class ApiUser
     {

@@ -1,6 +1,6 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
 using KitchenRestService.Api.Models;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace KitchenRestService.Api.Services
 {
-    public class AuthInfoService
+    public class AuthInfoService : IAuthInfoService
     {
         private readonly HttpClient _client;
 
@@ -27,9 +27,9 @@ namespace KitchenRestService.Api.Services
             var request = new HttpRequestMessage(HttpMethod.Get, "https://escalonn.auth0.com/userinfo");
             var authHeader = currentRequest.Headers["Authorization"].ToString();
             request.Headers.Add("Authorization", authHeader);
-            using var response = await _client.SendAsync(request);
+            using HttpResponseMessage response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
-            using var responseStream = await response.Content.ReadAsStreamAsync();
+            using Stream responseStream = await response.Content.ReadAsStreamAsync();
             var info = await JsonSerializer.DeserializeAsync<AuthUserInfo>(responseStream, _jsonOptions);
             return info.Email;
         }
