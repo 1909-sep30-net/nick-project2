@@ -1,0 +1,26 @@
+version: '3'
+services:
+  ui:
+    build:
+      context: intro-app
+      args:
+        # fridge_api_base_url: http://localhost:5000
+        fridge_api_base_url: http://192.168.99.100:5000
+    ports:
+      - '5001:80'
+  api:
+    build: KitchenRestService
+    ports:
+      - '5000:80'
+    networks:
+      - backend
+    environment:
+      ConnectionStrings__KitchenDb: 'Host=data;Database=kitchen;Username=postgres;Password=Pass@word'
+  data:
+    image: postgres
+    networks:
+      - backend
+    environment:
+      POSTGRES_PASSWORD: 'Pass@word'
+networks:
+  backend:
